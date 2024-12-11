@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AiChatbot.DB;
 
-public class ChatHistory
+public class AIChatHistory
 {
     [Key]
     public Guid recid { get; set; }

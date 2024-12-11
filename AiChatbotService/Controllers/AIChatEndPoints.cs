@@ -29,11 +29,11 @@ public static class AIChatEndPoints
         {
             var messages = new List<Message>();
             var messagelogs = new List<ChatLogs>();
-            ChatHistory? chathistory = null;
+            AIChatHistory? chathistory = null;
 
             // process existing messages if there's any
             chathistory = dbcontext
-                .ChatHistory.Where(x => x.itemkey == request.parentMessageId)
+                .AIChatHistory.Where(x => x.itemkey == request.parentMessageId)
                 .SingleOrDefault();
 
             // if not exist, we just create a new instance
@@ -66,8 +66,8 @@ public static class AIChatEndPoints
             var defaultModel = Model.GPT3_5_Turbo;
             if (AiChatbotService.Utils.Config.openAI.DEFAULT_MODEL == "gpt3.5") {
                 defaultModel = Model.GPT3_5_Turbo;
-            } else if (AiChatbotService.Utils.Config.openAI.DEFAULT_MODEL == "gpt4") {
-                defaultModel = Model.GPT4o;
+            } else if (AiChatbotService.Utils.Config.openAI.DEFAULT_MODEL == "gpt4omini") {
+                defaultModel = Model.GPT4oMini;
             }
             
 
@@ -76,6 +76,7 @@ public static class AIChatEndPoints
             var choice = response.FirstChoice;
 
             {
+                messages.Add(new Message(Role.Assistant, "Please remove the chat styling like bold ex. **, just sent the message in pure text"));
                 messages.Add(new Message(Role.Assistant, choice.Message));
             }
 
@@ -104,11 +105,11 @@ public static class AIChatEndPoints
             if (chathistory == null)
             {
                 var parentMessageId = !string.IsNullOrEmpty(request.parentMessageId)? request.parentMessageId : request.messageId ;
-                var newmessage = new ChatHistory()
+                var newmessage = new AIChatHistory()
                 {
                     recid = Guid.NewGuid(),
                     itemkey = parentMessageId,
-                    username = request.userInfo.userName,
+                    username = request.userInfo.userId,
                     channel = request.channel,
                     createdateutc = DateTime.UtcNow,
                     lastupdateutc = DateTime.UtcNow,
@@ -116,7 +117,7 @@ public static class AIChatEndPoints
                     logs = JsonSerializer.Serialize(messagelogs)
                 };
 
-                dbcontext.ChatHistory.Add(newmessage);
+                dbcontext.AIChatHistory.Add(newmessage);
             }
             else
             {

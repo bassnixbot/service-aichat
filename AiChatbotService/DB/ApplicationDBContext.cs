@@ -7,12 +7,12 @@ public class ApplicationDBContext : DbContext
     public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options)
         : base(options) { }
 
-    public virtual DbSet<ChatHistory> ChatHistory { get; set; } = null!;
+    public virtual DbSet<AIChatHistory> AIChatHistory { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasPostgresExtension("pgcrypto");
-        modelBuilder.Entity<ChatHistory>(entity =>
+        modelBuilder.Entity<AIChatHistory>(entity =>
         {
             entity.Property(e => e.recid).HasDefaultValueSql("gen_random_uuid()");
 
