@@ -38,7 +38,7 @@ jobs:
 
       # Build the Docker image
       - name: Build the Docker image
-        run: docker build -t ${{ env.DOCKER_USERNAME }}/bassnixbot-service-aichatbot:${{ github.sha }} -f ./EmoteService/Dockerfile ./EmoteService
+        run: docker build -t ${{ env.DOCKER_USERNAME }}/bassnixbot-service-aichatbot:${{ github.sha }} -f ./AiChatbotService/Dockerfile ./AiChatbotService
 
       # Tag the Docker image (optional)
       - name: Tag Docker image with latest
